@@ -17,32 +17,71 @@
     
 </head>
 <body>
-    <h1>Your total expense is:</h1>
     <h1 id="headingAmount"></h1>
-    <input id="inputAmount" type="text" placeholder="Enter the amount"></input>
+    <input id="inputAmount" type="text" placeholder="Enter the amount">
+    <input id="inputDescription" type="text" placeholder="Enter the Description">
     <button id="btnAddExpense" >+</button>
+    <div id="outputTable"></div>
+
     <script>
-        //get the headingElement
-        const headingElement = document.querySelector("#headingAmount");
-        //initial value of totalExpense is 0
-        let totalExpense = 0;
-        //set the headingElement to totalExpense
-        headingElement.textContent = totalExpense;
-        //on click event, add the input amount to total expense
-        function addExpenseToTotal() {
-            //read value from inputAmount
-            const inputElement = document.querySelector("#inputAmount");
-            const textAmount = inputElement.value;
-            //convert it to num
-            const amount = parseInt(textAmount);
-            //add value to total expense
-            totalExpense = totalExpense + amount;
-            //set the headingElement to totalExpense
-            headingElement.textContent = totalExpense;
-        }
-            
+        //get the ref to btnElement
         const btnElement= document.querySelector("#btnAddExpense");
 
+        //get the ref to headingElement
+        const headingElement = document.querySelector("#headingAmount");
+
+        //get the ref to inputAmountElement
+        const inputAmountElement = document.querySelector("#inputAmount");
+
+        //get the ref to inputDescriptionElement
+        const inputDescriptionElement = document.querySelector("#inputDescription");
+
+        //get the ref to outputTableElement
+        const outputTableElement = document.querySelector("#outputTable");
+
+        //initial value of totalExpense is 0
+        let totalExpense = 0;
+
+        //set the headingElement to totalExpense
+        headingElement.textContent = totalExpense;
+
+        //create an array for storing all expenses
+        const allExpenses = [];
+
+        //on click event, add the input amount to total expense
+        function addExpenseToTotal() {
+            
+            //read value from inputAmount
+            const textAmount = inputAmountElement.value;
+
+            //read value from inputDescription
+            const textDescription = inputDescriptionElement.value;
+
+            //convert it to num
+            const amount = parseInt(textAmount);
+
+            //new obj each time containing desc and amount
+            const expense = { description: textDescription, amount:amount};
+
+            //Pushing the obj into the allExpenses array
+            allExpenses.push(expense);
+
+            //add value to total expense
+            totalExpense = totalExpense + amount;
+
+            //creating a template to show total expense
+            const totalExpenseDisplayer = `Your total expense is ${totalExpense} rupees`;
+
+            //set the headingElement to totalExpense
+            headingElement.textContent = totalExpenseDisplayer; 
+            
+            const allExpensesHTML =  allExpenses.map( currentExpense => {return `<div> Amount: ${currentExpense.amount}:: Spent on: ${currentExpense.description}</div>`});
+
+            const joinedAllExpensesHTML = allExpensesHTML.join("");
+
+            outputTableElement.innerHTML = joinedAllExpensesHTML;
+        }
+ 
         btnElement.addEventListener("click", addExpenseToTotal, false);
         
     </script>
