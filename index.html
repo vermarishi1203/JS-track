@@ -17,6 +17,7 @@
     <nav class="navbar fixed-top bg-body-tertiary" data-bs-theme="dark">
         <div class="container-fluid">
         <span class="navbar-brand mb-0 h1">Personal Expense App</span>
+        <span class="navbar-brand mb-0 h1" id="navbarAmount"></span>
         </div>
     </nav>
     <div class="container-fluid bg-light pt-5 pb-4" style="min-height: 100vh">
@@ -24,7 +25,8 @@
             <div class="p-5 my-4 bg-body-tertiary rounded-3 bg-dark-subtle" >
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text" id="Spent in rupees">₹</span>
-                    <input id="inputAmount" type="text" class="form-control" placeholder="Amount spent" aria-label="Amount spent" aria-describedby="Spent in rupees">
+                    <input id="inputAmount" type="text" class="form-control" placeholder="Amount spent" aria-label="Rupees amount (with dot and two decimal places)" aria-describedby="Spent in rupees">
+                    <span class="input-group-text">.00</span>
                 </div>
                 <div class="input-group flex-nowrap mt-4">
                     <span class="input-group-text" id="Amount spent at">@</span>
@@ -45,6 +47,9 @@
         //get the ref to headingElement
         const headingElement = document.querySelector("#headingAmount");
 
+        //get the ref to navbarAmount
+        const navbarAmountElement = document.querySelector("#navbarAmount");
+
         //get the ref to inputAmountElement
         const inputAmountElement = document.querySelector("#inputAmount");
 
@@ -57,8 +62,8 @@
         //initial value of totalExpense is 0
         let totalExpense = 0;
 
-        //set the headingElement to totalExpense
-        headingElement.textContent = totalExpense;
+        //set the navbarAmountElement to totalExpense for intial zero display
+        navbarAmountElement.textContent = `Total: ${totalExpense}`;
 
         //create an array for storing all expenses
         const allExpenses = [];
@@ -91,11 +96,28 @@
             //creating a template to show total expense
             const totalExpenseDisplayer = `Your total expense is ${totalExpense} rupees`;
 
+            //creating a template to show total expense in navbar
+            const totalExpenseDisplayerNavbar = `Total: ${totalExpense}`
+
             //set the headingElement to totalExpense
             headingElement.textContent = totalExpenseDisplayer; 
             
+            //set the navbarAmountElement to totalExpense
+            navbarAmountElement.textContent = totalExpenseDisplayerNavbar;
+
+            renderlist(allExpenses);
+            
+        }
+ 
+        btnElement.addEventListener("click", addExpenseToTotal, false);
+        
+        //View Layer
+
+        //render the list
+        function renderlist(listArray) {
+
             //get the array of list items
-            const allExpensesHTML =  allExpenses.map(currentExpense => createListItem(currentExpense));
+            const allExpensesHTML =  listArray.map(currentExpense => createListItem(currentExpense));
 
             //join the arrayed list items into a single string with html tags 
             const joinedAllExpensesHTML = allExpensesHTML.join("");
@@ -103,10 +125,8 @@
             //display the string as html
             outputTableElement.innerHTML = joinedAllExpensesHTML;
         }
- 
-        btnElement.addEventListener("click", addExpenseToTotal, false);
 
-        //create list items from currentExpense
+        //create list items from currentExpense 
         function createListItem({ description , amount, moment }) {
             return `
                  <li class="list-group-item d-flex flex-row justify-content-between">
@@ -116,7 +136,11 @@
                     </div>
                     <div class="d-flex align-items-center">
                         <span class="px-5">${amount}</span>
-                        <button type="button" class="btn btn-outline-danger btn-sm">
+                        <button 
+                        type="button" 
+                        class="btn btn-outline-danger btn-sm"
+                        onClick="deleteListItem(${moment.valueOf()})"}
+                        >
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -124,12 +148,31 @@
             `;
         }
 
+        //Controler Functions:
+
         //create dates for list items
         function getDateString(currentMoment) {
             let options = {year:'numeric', month:'long', day:'numeric'};
             return currentMoment.toLocaleDateString('en-US',options);
         }
-        
+       
+        //delete list items
+        function deleteListItem(dateValue) {
+           
+        //    const filteredArray = [];
+
+            // for (let i =0; i <allExpenses.length ; i++) {
+                
+            //     if(allExpenses[i].moment.valueOf() !== dateValue) {
+            //         filteredArray.push(allExpenses[i]);
+            //     }
+            // }
+
+            const filteredArray = allExpenses.filter(currentExpense => currentExpense.moment.valueOf() !== dateValue);
+            
+            renderlist(filteredArray);
+
+        }
     </script>
 </body>
 </html>
