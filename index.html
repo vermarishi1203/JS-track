@@ -90,29 +90,35 @@
             //set the headingElement to totalExpense
             headingElement.textContent = totalExpenseDisplayer; 
             
-            const allExpensesHTML =  allExpenses.map( currentExpense => {
-                return `
+            //get the array of list items
+            const allExpensesHTML =  allExpenses.map(currentExpense => createListItem(currentExpense));
+
+            //join the arrayed list items into a single string with html tags 
+            const joinedAllExpensesHTML = allExpensesHTML.join("");
+
+            //display the string as html
+            outputTableElement.innerHTML = joinedAllExpensesHTML;
+        }
+ 
+        btnElement.addEventListener("click", addExpenseToTotal, false);
+
+        //create list items from currentExpense
+        function createListItem({ description , amount }) {
+            return `
                  <li class="list-group-item d-flex flex-row justify-content-between">
                     <div class="d-flex flex-column">
-                        ${currentExpense.description}
+                        ${description}
                         <small class="text-muted">July 02, 2024</small>
                     </div>
                     <div class="d-flex align-items-center">
-                        <span class="px-5">${currentExpense.amount}</span>
+                        <span class="px-5">${amount}</span>
                         <button type="button" class="btn btn-outline-danger btn-sm">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
                 </li>
-                `;
-            });
-
-            const joinedAllExpensesHTML = allExpensesHTML.join("");
-
-            outputTableElement.innerHTML = joinedAllExpensesHTML;
+            `;
         }
- 
-        btnElement.addEventListener("click", addExpenseToTotal, false);
         
     </script>
 </body>
