@@ -80,6 +80,11 @@
             //convert it to num
             const amount = parseInt(textAmount);
 
+            //clear the inputAmount and inputDescription
+            inputAmountElement.value = "";
+            inputDescriptionElement.value = "";
+
+
             //new obj each time containing desc and amount
             const expense = { 
                 description: textDescription, 
