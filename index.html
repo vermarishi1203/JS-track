@@ -104,17 +104,7 @@
             //add value to total expense
             totalExpense = totalExpense + amount;
 
-            //creating a template to show total expense
-            const totalExpenseDisplayer = `Your total expense is ${totalExpense} rupees`;
-
-            //creating a template to show total expense in navbar
-            const totalExpenseDisplayerNavbar = `Total: ${totalExpense}`
-
-            //set the headingElement to totalExpense
-            headingElement.textContent = totalExpenseDisplayer; 
-            
-            //set the navbarAmountElement to totalExpense
-            navbarAmountElement.textContent = totalExpenseDisplayerNavbar;
+            renderTotalExpense(totalExpense);
 
             renderlist(allExpenses);
             
@@ -123,6 +113,23 @@
         btnElement.addEventListener("click", addExpenseToTotal, false);
         
         //View Layer
+
+        //render the totalExpense
+        function renderTotalExpense (latestTotalExpense) {
+
+            //creating a template to show total expense
+            const totalExpenseDisplayer = `Your total expense is ${totalExpense} rupees`;
+
+            //creating a template to show total expense in navbar
+            const totalExpenseDisplayerNavbar = `Total: ${totalExpense}`;
+
+            //set the headingElement to totalExpense
+            headingElement.textContent = totalExpenseDisplayer; 
+            
+            //set the navbarAmountElement to totalExpense
+            navbarAmountElement.textContent = totalExpenseDisplayerNavbar;
+
+        }
 
         //render the list
         function renderlist(listArray) {
@@ -173,9 +180,17 @@
 
             const filteredArray = mutableAllExpenses.filter(currentExpense => currentExpense.moment.valueOf() !== dateValue);
 
-            mutableAllExpenses = [...filteredArray];
-
             renderlist(filteredArray);
+
+            //updating totalExpense
+            let expenseToBeSubtracted = mutableAllExpenses.find(currentExpense => currentExpense.moment.valueOf() === dateValue)
+
+            totalExpense = totalExpense - expenseToBeSubtracted.amount;
+
+            renderTotalExpense(totalExpense);
+
+            //updating mutable array
+            mutableAllExpenses = [...filteredArray];
 
         }
     </script>
