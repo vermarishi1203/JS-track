@@ -68,6 +68,9 @@
         //create an array for storing all expenses
         const allExpenses = [];
 
+        //create a mutable array to facilitate multiple deletions 
+        let mutableAllExpenses = [];
+
         //on click event, add the input amount to total expense
         function addExpenseToTotal() {
             
@@ -94,6 +97,9 @@
 
             //Pushing the obj into the allExpenses array
             allExpenses.push(expense);
+
+            //updating mutable array
+            mutableAllExpenses.push(expense);
 
             //add value to total expense
             totalExpense = totalExpense + amount;
@@ -161,20 +167,14 @@
             return currentMoment.toLocaleDateString('en-US',options);
         }
        
+
         //delete list items
-        function deleteListItem(dateValue) {
-           
-        //    const filteredArray = [];
+        function deleteListItem(dateValue) {           
 
-            // for (let i =0; i <allExpenses.length ; i++) {
-                
-            //     if(allExpenses[i].moment.valueOf() !== dateValue) {
-            //         filteredArray.push(allExpenses[i]);
-            //     }
-            // }
+            const filteredArray = mutableAllExpenses.filter(currentExpense => currentExpense.moment.valueOf() !== dateValue);
 
-            const filteredArray = allExpenses.filter(currentExpense => currentExpense.moment.valueOf() !== dateValue);
-            
+            mutableAllExpenses = [...filteredArray];
+
             renderlist(filteredArray);
 
         }
